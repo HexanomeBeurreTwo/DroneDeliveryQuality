@@ -62,29 +62,74 @@ fact connectes{
 
 
 
-sig Receptacle extends point { }
+sig Receptacle extends point { chemin : seq point }
 one sig Entrepot extends point {}
 
+/*
 fact {
-	some r: Receptacle | r in Entrepot.voisin 
-}
+	lone r: Receptacle | r in Entrepot.voisin 
+}*/
 
 one sig Grille {
 	l,h:Int
 }
 
 fact {
-	{ all r : Receptacle | r.x <= Grille.l and r.y <=Grille.h } and 
-	Entrepot.x <= Grille.l and Entrepot.y <= Grille.h
+	{ all r : Receptacle | r.x <= Grille.l and r.y <=Grille.h and r.x>=0 and r.y>=0} and 
+	Entrepot.x <= Grille.l and Entrepot.y <= Grille.h and Entrepot.x>=0 and Entrepot.y>=0
 }
 
-
-check {
-	
+fun abs(x: Int): Int{
+	x>=0 => x else minus[0,x]
 }
+
+/*
+//on peut avoir une distance > 3 entre receptacles qui sont pas dans le même chemin
+fact distanceEntreReceptacles {
+	all r1:Receptacle | some r2 : Receptacle - r1 |plus[ abs[minus[r1.x, r2.x]], abs[minus[r1.y,r2.y]]] <=3   
+}
+*/
+/*
+//verification de distanceEntreReceptacles->ok
+check{
+	some r1,r2:Receptacle |  abs[minus[r1.x , r2.x]] <=3  or abs[minus[r1.y , r2.y]] <=3
+} 
+*/
+
+//calcule la distance de Manhattan entre deux Intersection 
+fun distance[i1,i2: point]: Int {
+	abs[i1.x - i2.x].add[abs[i1.y - i2.y]]
+}
+
 
  
-run {#Receptacle = 6}  for 12
+//il faut trouver le chemin qui est une suite de receptacle entre l'entrepot et la destination
+/*fact Chemin { 
+	all rec: Receptacle | let chemin = rec.chemin |
+	not chemin.hasDups and
+	chemin.first= Entrepot and last[chemin] = rec
+	and all r1 :chemin.elems | some r2: chemin.elems-r1 | 
+	let i1 = chemin.idxOf[r1] , i2 = chemin.idxOf[r2] | 
+	i1=plus[i2,1] => distance[r1,r2]<=3 	
+	
+}*/
+
+fact {
+	{ all rec:Receptacle | all r1,r2:rec.chemin.elems-rec | 
+	{r1!= r2 and rec.chemin.idxOf[r1] =plus[rec. chemin.idxOf[r2] ,1] }=> distance[r1,r2]<=3 }
+	and {
+		all rec:Receptacle |  last[rec.chemin] = rec and  first[rec.chemin] = Entrepot	
+	}
+	and {
+		all rec:Receptacle | not rec.chemin.hasDups
+	}
+}
+
+
+
+
+
+run {#Receptacle = 7 and some r:Receptacle | #r.chemin > 2}  for 20
 
 
 
@@ -95,9 +140,6 @@ run {#Receptacle = 6}  for 12
 //[TEST]  une deuxieme regle de production 
 //pred estVoisin[p1,p2:point] { p1 in p2.voisin }
 //run estVoisin for 7
-
-
-
 
 
  /*
