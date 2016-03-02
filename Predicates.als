@@ -1,5 +1,3 @@
-module Predicates
-
 open Models
 open Helpers
 
@@ -17,6 +15,12 @@ pred getNearPoints[p1: Point, near: set Point] {
 
 // Return if a warehouse has a way from the warehouses
 pred hasWayToWarehouse[r: Receptacle] {
-	( distance[r.coordonate, Entrepot.coordonate] <= 3 ) or
-	( some ch :Chemin |  last[ch.Content] = r.coordonate and  first[ch.Content] = Entrepot.coordonate )
+	( distance[r.coordinate, Entrepot.coordinate] <= 3 ) or
+	( some ch :Chemin |  last[ch.Content] = r.coordinate and  first[ch.Content] = Entrepot.coordinate )
+}
+
+// Time
+pred init [t: Time] {
+    all d: Drone | d.coordinate.t != Entrepot.coordinate and #d.livraison = 0
+	all c:Commande | Entrepot.commandes.elems = Entrepot.commandes.elems + c
 }

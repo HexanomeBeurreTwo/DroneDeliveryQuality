@@ -6,22 +6,13 @@ open Predicates
 open Helpers
 
 /*check {
-	all d1, d2 : Drone | ((d1 != d2) and (d1.coordonate = d2.coordonate)) => ((d1.coordonate = Entrepot.coordonate) and (d2.coordonate = Entrepot.coordonate))
+	all d1, d2 : Drone | ((d1 != d2) and (d1.coordinate = d2.coordinate)) => ((d1.coordinate = Entrepot.coordinate) and (d2.coordinate = Entrepot.coordinate))
 }*/
 
 // ===== DEBUG ===== //
-fact { Entrepot.coordonate.x = 0 and Entrepot.coordonate.y = 0}
+//fact { Entrepot.coordinate.x = 0 and Entrepot.coordinate.y = 0}
 
-// ===== INIT ===== //
-pred init[height, length, droneNb, receptacleNb: Int] {
-	Grille.l = length and
-	Grille.h = height and
-	Grille.DNB = droneNb and
-	#Drone= droneNb and
-	Grille.RNB = receptacleNb and
-	#Receptacle = receptacleNb
-}
+//sig Time {}
 
-run {
-	init[20,20,8,5]
-} for 20
+run {#Drone = 2 and #Receptacle = 3 and #Commande = 2
+}  for 10

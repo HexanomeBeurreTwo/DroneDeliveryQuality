@@ -1,5 +1,3 @@
-module Helpers
-
 open Models
 
 //Retourne la valeur absolue d'un entier

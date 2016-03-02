@@ -1,4 +1,4 @@
-module Models
+open util/ordering[Time] as to
 
 one sig Grille {
 	l,h:Int,	//Dimension de la Grille
@@ -12,11 +12,12 @@ sig Point {
 }
 
 sig Receptacle {
-	coordonate: Point
+	coordinate: Point
 }
 
 one sig Entrepot {
-	coordonate: Point
+	coordinate: Point,
+	commandes : seq Commande
 }
 
 sig Chemin {
@@ -25,5 +26,12 @@ sig Chemin {
 }
 
 sig Drone {
-	coordonate : Point
+	coordinate : Point one -> Time,
+	livraison : lone Commande
 }
+
+sig Commande {
+		destination : one Receptacle
+}
+
+sig Time {}
