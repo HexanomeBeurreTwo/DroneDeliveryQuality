@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view nodetheme="Martha">
+
+<projection> <type name="Grille"/> <type name="String"/> </projection>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Int"/>
+   <type name="point"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="seq/Int"/>
+   <set name="h" type="Int"/>
+   <set name="l" type="Int"/>
+</node>
+
+<node shape="Egg" color="Blue">
+   <type name="Receptacle"/>
+</node>
+
+<node shape="Ellipse" color="Yellow">
+   <type name="Entrepot"/>
+</node>
+
+<node shape="Parallelogram" color="Green">
+   <type name="Grille"/>
+</node>
+
+<node style="Bold">
+   <set name="$r" type="Receptacle"/>
+</node>
+
+<edge color="Black" style="Bold" constraint="no" weight="1">
+   <relation name="chemin"> <type name="Receptacle"/> <type name="seq/Int"/> <type name="point"/> </relation>
+</edge>
+
+<edge style="Dashed">
+   <relation name="voisin"> <type name="point"/> <type name="point"/> </relation>
+</edge>
+
+<edge style="Dotted" visible="no">
+   <relation name="bas"> <type name="point"/> <type name="point"/> </relation>
+   <relation name="droite"> <type name="point"/> <type name="point"/> </relation>
+   <relation name="gauche"> <type name="point"/> <type name="point"/> </relation>
+   <relation name="haut"> <type name="point"/> <type name="point"/> </relation>
+</edge>
+
+<edge style="Dotted" visible="no" attribute="yes">
+   <relation name="x"> <type name="point"/> <type name="Int"/> </relation>
+   <relation name="y"> <type name="point"/> <type name="Int"/> </relation>
+</edge>
+
+<edge visible="no">
+   <relation name="$connection"> <type name="point"/> <type name="point"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
