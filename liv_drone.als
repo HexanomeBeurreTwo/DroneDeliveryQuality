@@ -12,7 +12,5 @@ open Helpers
 // ===== DEBUG ===== //
 //fact { Entrepot.coordinate.x = 0 and Entrepot.coordinate.y = 0}
 
-//sig Time {}
-
 run {#Drone = 2 and #Receptacle = 3 and #Commande = 2
 }  for 10

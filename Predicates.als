@@ -1,7 +1,6 @@
 open Models
 open Helpers
 
-// ==== PREDICATES ==== //
 // Return if two points are near
 pred isNear[p1, p2: Point] {
 		( p1.x = plus[p2.x,1] and p1.y = p2.y) or ( p1.x = minus[p2.x,1] and p1.y = p2.y) or
@@ -19,8 +18,8 @@ pred hasWayToWarehouse[r: Receptacle] {
 	( some ch :Chemin |  last[ch.Content] = r.coordinate and  first[ch.Content] = Entrepot.coordinate )
 }
 
-// Time
+// Init time
 pred init [t: Time] {
     all d: Drone | d.coordinate.t != Entrepot.coordinate and #d.livraison = 0
-	all c:Commande | Entrepot.commandes.elems = Entrepot.commandes.elems + c
+	all c: Commande | Entrepot.commandes.elems = Entrepot.commandes.elems + c
 }
