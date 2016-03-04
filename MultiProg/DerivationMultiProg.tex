@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{geometry}
+\usepackage{appendix}
+\usepackage{verbatim}
+\usepackage{hyperref}
+ \usepackage{amssymb}
+\geometry{top=2cm, bottom=2cm, left=3cm, right=3cm}
+
+\title{Qualité Logicielle \\ TP}
+\author{Victor \textsc{Nouvellet}}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Dérivation d'un multiprogramme}
+
+\section{Problème}
+Deriver un multiprogramme qui permette à des drones voulant accéder à une même position au prochain pas de temps d’élire celui d’entre eux qui sera prioritaire.
+Le processus P.i (associé au drone i) possède la variable booléenne y.i qu'il est seul à pouvoir modifier. 
+Chaque Pi affecte une valeur à cette variable. Le problème est de synchroniser les processus pour qu’à leur terminaison la post-condition suivante soit établie :
+$$R: (\#j::y.j)=1$$
+
+\section{Solution}
+Si la Weakest Precondition (WPC) est correcte localement et globalement\\
+Alors : \\
+$(\#j::y.j)=1$\\
+$\equiv $\\
+$(\#j::B.j)=1$\\
+$\equiv $\\
+$(\exists j::y.j) \wedge (\forall i,j::B.i \wedge B.j => i=j) $\\
+$\{ i=\alpha \wedge \alpha=j => i=j\}$\\
+$ \hookrightarrow B.i\triangleq(i=\alpha) $\\\\
+
+Si $i \neq j$ alors\\
+$(y.i \equiv (i=\alpha)) => \neg y.i$\\
+$\equiv $\\
+$(\neg y.i \equiv (i\neq\alpha)) => \neg y.i$\\
+$\equiv $\\
+$(y.i \equiv (i\neq\alpha)) \vee \neg y.i$\\
+$\equiv $\\
+$\neg y.i \vee (i\neq\alpha) $\\
+\\
+
+\textbf{Dérivation :}\\
+
+\centering
+\begin{tabular}{|l|l|}
+	\hline    
+    \textbf{Initialisation} \\
+    \hline
+    ...\\
+    \hline
+    \hline
+    \textbf{P(i)}\\
+    \hline
+    var y.i \\
+    \{D.i\} \\
+    ; alpha := i\\
+	; y.i := (alpha = i)\\
+	$\{?y.i \equiv (alpha=i)\}$ (WPC)\\
+    \hline
+    \hline
+    \textbf{Post}\\
+    \hline
+    (\#j::y.j) = 1 \\
+    \hline
+\end{tabular}
+
+
+\end{document}
