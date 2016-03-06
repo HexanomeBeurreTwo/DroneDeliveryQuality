@@ -19,7 +19,11 @@
    <type name="Models/Time"/>
    <type name="seq/Int"/>
    <type name="Models/to/Ord"/>
+   <set name="$c" type="Models/Commande"/>
+   <set name="$d" type="Models/Drone"/>
+   <set name="$d&apos;" type="Models/Drone"/>
    <set name="$r" type="Models/Receptacle"/>
+   <set name="$t" type="Models/Time"/>
    <set name="First" type="Models/to/Ord"/>
    <set name="Next" type="Models/to/Ord"/>
 </node>
@@ -28,7 +32,7 @@
    <type name="Models/Receptacle"/>
 </node>
 
-<node shape="Diamond" color="Black">
+<node shape="Diamond" color="Green">
    <type name="Models/Entrepot"/>
 </node>
 
@@ -39,8 +43,28 @@
 <node visible="no">
    <type name="Models/Chemin"/>
    <type name="Models/Grille"/>
-   <type name="Models/Produit"/>
 </node>
+
+<edge color="Gray" style="Dashed">
+   <relation name="near"> <type name="Models/Point"/> <type name="Models/Point"/> </relation>
+</edge>
+
+<edge color="Green">
+   <relation name="destination"> <type name="Models/Commande"/> <type name="Models/Receptacle"/> </relation>
+</edge>
+
+<edge color="Red" style="Bold">
+   <relation name="livraison"> <type name="Models/Drone"/> <type name="Models/Commande"/> </relation>
+   <relation name="localisation"> <type name="Models/Commande"/> <type name="Models/Drone"/> </relation>
+   <relation name="localisation"> <type name="Models/Commande"/> <type name="Models/Entrepot"/> </relation>
+   <relation name="localisation"> <type name="Models/Commande"/> <type name="Models/Receptacle"/> </relation>
+</edge>
+
+<edge color="Yellow" weight="1">
+   <relation name="coordinate"> <type name="Models/Drone"/> <type name="Models/Point"/> </relation>
+   <relation name="coordinate"> <type name="Models/Entrepot"/> <type name="Models/Point"/> </relation>
+   <relation name="coordinate"> <type name="Models/Receptacle"/> <type name="Models/Point"/> </relation>
+</edge>
 
 <edge visible="no">
    <relation name="Content"> <type name="Models/Chemin"/> <type name="seq/Int"/> <type name="Models/Point"/> </relation>
@@ -51,7 +75,6 @@
    <relation name="h"> <type name="Models/Grille"/> <type name="Int"/> </relation>
    <relation name="l"> <type name="Models/Grille"/> <type name="Int"/> </relation>
    <relation name="length"> <type name="Models/Chemin"/> <type name="Int"/> </relation>
-   <relation name="volume"> <type name="Models/Produit"/> <type name="Int"/> </relation>
    <relation name="x"> <type name="Models/Point"/> <type name="Int"/> </relation>
    <relation name="y"> <type name="Models/Point"/> <type name="Int"/> </relation>
 </edge>

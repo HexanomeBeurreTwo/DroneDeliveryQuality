@@ -19,7 +19,11 @@ pred hasWayToWarehouse[r: Receptacle] {
 }
 
 // Init time
-pred init [t: Time] {
-    all d: Drone | d.coordinate.t != Entrepot.coordinate and #d.livraison = 0
-	all c: Commande | Entrepot.commandes.elems = Entrepot.commandes.elems + c
+pred init [t: Time] {	
+	all d : Drone | ( Entrepot.coordinate in d.coordinate.t ) 
+	all c : Commande | (Entrepot in c. localisation.t)
 }
+
+
+
+

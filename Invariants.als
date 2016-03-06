@@ -34,7 +34,12 @@ fact { some r : Receptacle | isNear[r.coordinate, Entrepot.coordinate] }
 
 // Si deux Drones ont une même postion, alors ils sont tous les deux à l'Entrepot
 //fact { all d1 : Drone | d1.coordinate != Entrepot.coordinate => ( no d2 : Drone-d1 | (d1.coordinate = d2.coordinate) ) }
-fact { all d1 : Drone | all t:Time | d1.coordinate.t != Entrepot.coordinate => ( no d2 : Drone-d1 | all t : Time | (d1.coordinate.t = d2.coordinate.t) ) }
+fact { 
+	all d1 : Drone | 
+	all t:Time | 
+	( d1.coordinate.t != Entrepot.coordinate)  => 
+		( no d2 : Drone-d1 |  (d1.coordinate.t = d2.coordinate.t) ) 
+}
 
 
 // ===== Ways ===== //
@@ -49,22 +54,69 @@ fact {
 	}
 }
 
+//==== Commande ====//
+// Deux commande ne peuvent se retrouver en même temps sur même Drone
+fact {
+	all t : Time | all c1 : Commande |   c1.localisation.t in Drone => ( no c2 : Commande |c1!=c2 and  c2.localisation.t = c1.localisation.t)
+}
+
+fact{
+	all t: Time | all c:Commande | c.localisation.t in Receptacle => c.localisation.t in c.destination 
+}
+
+// livraison <=> localisation
+fact {
+		all t : Time | all c : Commande | all d : Drone | ( d in c.localisation.t  <=> c in d.livraison.t )
+}
+
+
 
 // ===== Time Management ===== //
+
+fact {
+	/*all t :Time-last | let t' = t.next {
+		all c : Commande | 
+			c.localisation.t in Drone and c.localisation.t.coordinate.t not in c.destination.coordinate =>
+			c.localisation.t' = c.localisation.t
+	}*/
+
+}
 
 fact Traces {
     init [first]
     all t: Time-last |
-        let t' = t.next |
-				all d : Drone | distance[d.coordinate.t', d.coordinate.t] = 1
-				//all d : Drone | distance[d.coordinate.t', d.coordinate.t] = 1 and distance[d.coordinate.t', Entrepot.coordinate] <= distance[d.coordinate.t, Entrepot.coordinate]
+        let t' = t.next {
+				all d : Drone | 
+						( d.coordinate .t = Entrepot.coordinate and d.livraison.t = none ) => d.coordinate .t' = Entrepot.coordinate
+						else  distance[d.coordinate.t', d.coordinate.t] <= 1
+	}
+    all t: Time-last |
+        let t' = t.next {
+				all c : Commande | 
+						c.localisation.t in Receptacle => c.localisation.t' = c.localisation.t
+						else	c.localisation.t in Drone => {
+							let d = c.localisation.t |
+								 d.coordinate.t in c.destination.coordinate 	=>  ( c.localisation.t' = c.destination and d.livraison.t' = none )
+								else  /*c.destination.coordinate != d.coordinate.t =>*/  c.localisation.t' = c.localisation.t
+						} else 1>0
+		}
+				//all d : Drone | distance[d.coordinate.t', d.coordinate.t] <= 1 and 
+				//distance[d.coordinate.t', Entrepot.coordinate] <= distance[d.coordinate.t, Entrepot.coordinate]
 }
 
-assert Remplissage {
-	all d:Drone | 
-		all t:Time | 
-			d.coordinate.t = Entrepot.coordinate and 
-			#d.livraison = 0 and
-			#Entrepot.commandes > 0 => d.livraison = Entrepot.commandes.first and
-			Entrepot.commandes = Entrepot.commandes.rest
+
+fact Remplissage {
+    all t: Time-last |
+        let t' = t.next |
+			 some d : Drone | 
+ 				( d.coordinate.t = Entrepot.coordinate and d.livraison.t = none 
+				and (lone c : Commande | c.localisation.t = Entrepot ) )
+				=> 
+				( lone c : Commande | d.coordinate.t' = Entrepot.coordinate and d.livraison.t' = c and  c.localisation.t' = d )		
 }
+
+
+
+
+
+

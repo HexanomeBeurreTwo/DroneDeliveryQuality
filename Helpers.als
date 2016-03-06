@@ -9,3 +9,7 @@ fun abs(x: Int): Int{
 fun distance[i1,i2: Point]: Int {
 	abs[plus[abs[minus[i1.y,i2.y]],abs[minus[i1.x,i2.x]]]]
 }
+
+fun getNextPosition[i1,i2:Point] :Point{
+	
+}
