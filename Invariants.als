@@ -97,7 +97,7 @@ fact Traces {
 						else	c.localisation.t in Drone => {
 							let d = c.localisation.t |
 								 d.coordinate.t in c.destination.coordinate 	=>  ( c.localisation.t' = c.destination and d.livraison.t' = none )
-								else  /*c.destination.coordinate != d.coordinate.t =>*/  c.localisation.t' = c.localisation.t
+								//else  /*c.destination.coordinate != d.coordinate.t =>*/  c.localisation.t' = c.localisation.t
 						} else 1>0
 		}
 				//all d : Drone | distance[d.coordinate.t', d.coordinate.t] <= 1 and 
