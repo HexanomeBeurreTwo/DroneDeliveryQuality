@@ -23,32 +23,35 @@ open Helpers
 	no i : Int | some c1,c2 : Commande | c1!=c2 and  Entrepot.commandes.c1 =i and  Entrepot.commandes.c2 =i
 } */
 
-fact {
-	//all t : Time | no d : Drone | d.livraison.t = none and d.coordinate.t not in Entrepot.coordinate 
-}
+/*check {
+	all t : Time | no d : Drone | d.livraison.t = none and d.coordinate.t not in Entrepot.coordinate 
+}*/
 
 
 
-check {
+/*check {
 	//all t : Time | all c : Commande | (c.localisation.t in Drone or c.localisation.t in Entrepot or c.localisation.t in Receptacle )
 	//some t : Time | some c : Commande | c.localisation.t in Drone and c.localisation.t in Entrepot
 	//all t : Time | no d :Drone | (some c1,c2:Commande | c1 !=c2 and d in c1.localisation.t  and  d in c2.localisation.t )
 	//no t : Time | 
-	//		(some c : Commande |  c.localisation.t in Entrepot) and
-	//		(some d : Drone | d.coordinate.t in Entrepot.coordinate) 
+			//(some c : Commande |  c.localisation.t in Entrepot) and 
+			//(some d : Drone | d.coordinate.t in Entrepot.coordinate and d.livraison.t != none) 
 	//no t: Time-last | let t' = t.next {
 		//( some c : Commande | c.localisation.t  in Drone and c.localisation.t' in c.destination ) 
 		//and (some d : Drone | d.coordinate.t in Entrepot.coordinate)
 	//}
 	//all t : Time | all d : Drone | d.livraison.t = none or d.coordinate.t in Entrepot.coordinate
-	
-} 
+	//no t: Time  | some d:Drone | d.chemin.t != none and t!=last
+	no t: Time  | 
+		some d : Drone | d.coordinate.t = Entrepot.coordinate and d.commande.t != none
+}*/
+
 
 run {
-	#Commande = 5
-	#Drone = 2 
-	#Receptacle = 3 
-}  for 5
+	#Commande = 2
+	#Drone = 2
+	#Receptacle = 2 
+}  for 5 
 
 
 
