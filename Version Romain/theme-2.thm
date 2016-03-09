@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Int"/>
+   <type name="String"/>
+   <type name="Univ"/>
+   <type name="univ"/>
+   <type name="Models/Chemin"/>
+   <type name="Models/Commande"/>
+   <type name="Models/Drone"/>
+   <type name="Models/Entrepot"/>
+   <type name="Models/Grille"/>
+   <type name="Models/Point"/>
+   <type name="Models/Receptacle"/>
+   <type name="Models/Time"/>
+   <type name="seq/Int"/>
+   <type name="Models/to/Ord"/>
+   <set name="$c" type="Models/Commande"/>
+   <set name="$d&apos;" type="Models/Drone"/>
+   <set name="$r" type="Models/Receptacle"/>
+   <set name="$t" type="Models/Time"/>
+</node>
+
+</view>
+
+</alloy>
