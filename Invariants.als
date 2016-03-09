@@ -11,7 +11,7 @@ fact { all p1 : Point | no p2 : Point-p1 | p1.x = p2.x and p1.y = p2.y }
 // Instance near Points
 fact { all p: Point | getNearPoints[p,p.near] }
 // Every point is in the grid
-fact { all p : Point | p.x <= Grille.l and p.y <=Grille.h and p.x>=0 and p.y>=0 }
+fact { all p : Point | p.x <= 5 and p.y <=5 and p.x>=0 and p.y>=0 }
 
 
 // ===== Receptacles ===== //
@@ -34,7 +34,7 @@ fact { some r : Receptacle | isNear[r.coordinate, Entrepot.coordinate] }
 
 // Si deux Drones ont une même postion, alors ils sont tous les deux à l'Entrepot
 //fact { all d1 : Drone | d1.coordinate != Entrepot.coordinate => ( no d2 : Drone-d1 | (d1.coordinate = d2.coordinate) ) }
-fact { 
+fact {
 	all d1 : Drone | 
 	all t:Time | 
 	( d1.coordinate.t != Entrepot.coordinate)  => 
@@ -68,15 +68,57 @@ fact {
 }*/		
 
 // ===== Time Management ===== //
+// OK
+fact OneStepByTime {
+    all t: Time-last |
+        let t' = t.next |
+				all d : Drone | distance[d.coordinate.t, d.coordinate.t'] = 0 or distance[d.coordinate.t, d.coordinate.t'] = 1
+}
+// OK
+fact EvolutionDroneTemps {
+    all t: Time-last |
+        let t' = t.next |
+				all d : Drone | (d.coordinate.t!=Entrepot.coordinate) => 
+					{distance[d.coordinate.t', Entrepot.coordinate] < distance[d.coordinate.t, Entrepot.coordinate]}
+					else { (d.commande.t != none) => 
+						{distance[d.coordinate.t', d.commande.t.destination.coordinate] < distance[d.coordinate.t, d.commande.t.destination.coordinate]}
+						else {d.coordinate.t' = Entrepot.coordinate}
+					}
+}
+
+/*
+fact CommandsInDrone {
+    all t: Time-last | let t'= t.next | all c: Commande | some d: Drone | (d.coordinate.t = Entrepot.coordinate  and c in Entrepot.commandes.t) => 
+	{ d.commande.t' = c } else { c in Entrepot.commandes.t' }
+}*/
+//and d.coordinate.t = d.commande.t.destination.coordinate
+
+fact CommandsInEntrepot {
+    all t: Time-last | let t'= t.next | all c: Commande | all d: Drone | (d.commande.t = c) => {d.commande.t' = c}
+}
+
 /*
 fact EvolutionDroneTemps {
     init [first]
     all t: Time-last |
         let t' = t.next |
 				all d : Drone | 
-						//( d.coordinate .t = Entrepot.coordinate and d.livraison.t = none ) => d.coordinate .t' = Entrepot.coordinate
-						//else // distance[d.coordinate.t', d.coordinate.t] <= 1
-						//{
+						( d.commande.t = none) => {
+						distance[d.coordinate.t', Entrepot.coordinate] < distance[d.coordinate.t, Entrepot.coordinate]}
+						else {
+						distance[d.coordinate.t', d.commande.t'.destination.coordinate] < distance[d.coordinate.t, d.commande.t.destination.coordinate]}
+}
+*/
+
+/*
+fact EvolutionDroneTemps {
+    init [first]
+    all t: Time-last |
+        let t' = t.next |
+				all d : Drone | 
+						( d.coordinate.t = Entrepot.coordinate and d.livraison.t = none ) => d.coordinate .t' = Entrepot.coordinate
+						else // [d.coordinate.t', d.coordinate.t] <= 1
+						{
 							d.coordinate.t != d.chemin.t.Content.last.coordinate =>
 							// On its way
 							{
@@ -94,6 +136,7 @@ fact EvolutionDroneTemps {
 							}
 }
 */
+
 /*
 fact EvolutionCommandeTemps {
     all t: Time-last |
@@ -123,12 +166,7 @@ fact EvolutionCommandeTemps {
 					)		
 }*/
 
-/*
-fact OneDroneForOneCommand {
-	all t: Time | all d1: Drone | no d2: Drone - d1 | d1.commande.t = d2.commande.t
-}*/
-
-
+// OK
 fact OneCommandIsOnlyInOnePlace {
 	all t: Time { 
 		all d1: Drone | no d2: Drone - d1 | d1.commande.t = d2.commande.t

@@ -48,10 +48,11 @@ open Helpers
 
 
 run {
-	#Commande = 2
-	#Drone = 2
-	#Receptacle = 2 
-}  for 5 
+	init[first]
+	#Commande = 1
+	#Drone = 1
+	#Receptacle = 1
+}  for 7 
 
 
 
