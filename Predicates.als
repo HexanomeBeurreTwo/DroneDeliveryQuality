@@ -18,12 +18,22 @@ pred hasWayToWarehouse[r: Receptacle] {
 	( some ch :Chemin |  last[ch.Content] = r.coordinate and  first[ch.Content] = Entrepot.coordinate )
 }
 
-// Init time
+// Init time ♫
 pred init [t: Time] {	
 	all d : Drone | ( Entrepot.coordinate in d.coordinate.t ) 
-	all c : Commande | (Entrepot in c. localisation.t)
+	all c : Commande | c in Entrepot.commandes.t
 }
 
+pred getNextPointInDelivery [pInit,pDest, pNext: Point] {
+	pNext in pInit.near and pNext.*near = pDest and distance[pNext, pDest] <=  distance[pInit, pDest]
+}
 
+pred deliverCommand[d: Drone, pReceptacle: Point, t, t': Time] {
+	one r: Receptacle | r.coordinate = pReceptacle
+	and d.coordinate.t' = d.coordinate.t 
+	and d.chemin.t' = none
+	and r.commandes.t' = r.commandes.t + d.commande.t
+	and d.commande.t' = none
+}
 
 

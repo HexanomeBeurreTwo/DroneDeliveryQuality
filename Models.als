@@ -12,11 +12,13 @@ sig Point {
 }
 
 sig Receptacle {
-	coordinate: Point
+	coordinate: Point,
+	commandes: set Commande -> Time
 }
 
 one sig Entrepot {
-	coordinate: Point
+	coordinate: Point,
+	commandes: set Commande -> Time
 }
 
 sig Chemin {
@@ -26,12 +28,12 @@ sig Chemin {
 
 sig Drone {
 	coordinate : Point one -> Time,
-	livraison : Commande lone -> Time
+	commande : Commande lone -> Time,
+	chemin: Chemin lone -> Time
 }
 
 sig Commande {
-		destination : one Receptacle,
-		localisation : {Receptacle+Entrepot+Drone} one -> Time
+		destination : one Receptacle
 }
 
 sig Time {}
